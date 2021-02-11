@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    networks:
+      - opentracing
+    ports:
+      - 6831:6831/udp
+      # UI
+      - 16686:16686
+  hotrod:
+    image: jaegertracing/example-hotrod:latest
+    environment:
+      - JAEGER_AGENT_HOST=jaeger
+      - JAEGER_AGENT_PORT=6831
+    networks:
+      - opentracing
+    ports:
+      - 8081-8084:8080-8083
+
+networks:
+  opentracing:
+    external: false
